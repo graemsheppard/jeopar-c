@@ -1,0 +1,59 @@
+~C-PROGRAMMING
+This function in C is used to allocate memory, but does not guarantee the stored values
+malloc
+100
+
+~C-PROGRAMMING
+This function in C is used to create a new process
+fork
+200
+
+~C-PROGRAMMING
+This is the value returned when a variable is preceded by an ampersand
+address
+300
+
+~C-PROGRAMMING
+This function should be called once the dynamic memory is no longer needed
+free
+400
+
+~PROCESSES AND THREADS
+This type of threading is described as 'fork-join' threading
+synchronous
+100
+
+~PROCESSES AND THREADS
+This is described as a basic unit of computing
+thread
+200
+
+~PROCESSES AND THREADS
+A process is wrapped in this block for the operating system to use
+pcb
+300
+
+~PROCESSES AND THREADS
+Unlike concurrency, this programming concept requires more than one CPU to occur
+parallelism
+400
+
+~OPERATING SYSTEMS
+This may be triggered by hardware or software and forces the running program to immediately respond
+interrupt
+100
+
+~OPERATING SYSTEMS
+A process that is changing data that could be used by other processes is said to be in this section
+critical
+200
+
+~OPERATING SYSTEMS
+This part of the operating system is responsible for managing processes, running application programs, and handling IO
+kernel
+300
+
+~OPERATING SYSTEMS
+This is a type of variable for dealing with the critical section problem, and can only be accessed via wait() and signal()
+semaphore
+400
