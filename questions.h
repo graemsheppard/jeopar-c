@@ -18,9 +18,9 @@
 
 // List of 3 categories as array of strings
 static char categories[NUM_CATEGORIES][MAX_LEN] = {
-    "programming", 
-    "algorithms", 
-    "databases"
+    "C-PROGRAMMING",
+    "PROCESSES AND THREADS",
+    "OPERATING SYSTEMS"
 };
 
 // Questions struct for each question
@@ -38,6 +38,8 @@ question questions[NUM_QUESTIONS];
 
 // Initializes the array of questions for the game
 extern void initialize_game(void);
+
+bool validate_question(question);
 
 // Displays each of the remaining categories and question dollar values that have not been answered
 extern void display_categories(void);
