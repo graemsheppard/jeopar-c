@@ -49,7 +49,7 @@ void show_results(player *players, int num_players){
 }
 
 
-int main()
+int main(int argc, char *argv[])
 {
     // An array of 4 players, may need to be a pointer if you want it set dynamically
     player players[NUM_PLAYERS];
