@@ -96,25 +96,72 @@ bool validate_question(question q) {
 // Displays each of the remaining categories and question dollar values that have not been answered
 void display_categories(void)
 {
-    // print categories and dollar values for each unanswered question in questions array
+	// print categories and dollar values for each unanswered question in questions array
+	for(int i=0; i<NUM_CATEGORIES; i++){
+		printf("%s     ", categories[i]); 
+	}
+	printf("\n");
+	for(int i=0; i<4;i++){
+		for(int j=0; j<NUM_QUESTIONS; j+=4){
+			if(questions[j].answered == true){
+				printf("%s     ", "XXX");
+			}else{
+				printf("%d     ", questions[j].value);
+			}
+		}
+		printf("\n");
+	}
 }
 
 // Displays the question for the category and dollar value
 void display_question(char *category, int value)
 {
-
+	for (int i=0; i<NUM_QUESTIONS; i++){
+		if (strcmp(questions[i].category, category)==0 && questions[i].value == value){
+			printf("%s\n", questions[i].question);
+		}
+	}
 }
 
 // Returns true if the answer is correct for the question for that category and dollar value
 bool valid_answer(char *category, int value, char *answer)
 {
     // Look into string comparison functions
+    for (int i=0; i<NUM_QUESTIONS; i++){
+                if (strcmp(questions[i].category, category)==0 && questions[i].value == value){
+                        if(strcmp(strstr(answer, questions[i].answer), questions[i].answer) ==0){
+				questions[i].answered = true;
+				return true;
+			}
+			questions[1].answered=true;
+                }
+        }
+
     return false;
+
 }
 
 // Returns true if the question has already been answered
 bool already_answered(char *category, int value)
 {
     // lookup the question and see if it's already been marked as answered
+    for (int i=0; i<NUM_QUESTIONS; i++){
+                if (strcmp(questions[i].category, category)==0 && questions[i].value == value){
+                        if (questions[i].answered == true){
+				questions[i].value =0;
+				return true;
+			}
+                }
+        }
     return false;
+}
+
+void display_answer(char *category, int value){
+	for (int i=0; i<NUM_QUESTIONS; i++){
+                if (strcmp(questions[i].category, category)==0 && questions[i].value == value){
+                        printf("Correct answer is: %s\n", questions[i].answer);
+			break;
+                }
+        }
+
 }
