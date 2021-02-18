@@ -26,13 +26,13 @@ int question_count = NUM_QUESTIONS;
 void tokenize(char *input, char **tokens){
 	char *ans = strrchr (input, ' ');
 	if (ans && *(ans+1)){
-		return &ans+1;
+		//return &ans+1;
 	}
 }
 
 // Displays the game results for each player, their name and final score, ranked from first to last place
 void show_results(player *players, int num_players){
-	player tmp; 
+	player tmp;
 	for(int i=0; i<num_players; i++){
 		for(int j=0; j<num_players; j++){
 			if (players[j].score > players[i].score){
@@ -44,7 +44,7 @@ void show_results(player *players, int num_players){
 	}
 
 	for (int i=0; i<num_players; i++){
-		printf("%s: $%d\n", players[i].name, players[i].score);		
+		printf("%s: $%d\n", players[i].name, players[i].score);
 	}
 }
 
@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
 {
     // An array of 4 players, may need to be a pointer if you want it set dynamically
     player players[NUM_PLAYERS];
-    
+
     // Input buffer and and commands
     char buffer[BUFFER_LEN] = { 0 };
 
@@ -63,9 +63,11 @@ int main(int argc, char *argv[])
     // Prompt for players names
     // initialize each of the players in the array
      for(int i=0; i< NUM_PLAYERS; i++){
-        printf("%s %d %s: " "Enter Player", i+1, " name");
-        scanf("%[^\n]%*c", players[i].name);
-        players[i].score =0;
+		player p;
+        printf("Enter Player %d Name: ", i+1);
+        scanf("%[^\n]%*c", p.name);
+        p.score = 0;
+		players[i] = p;
         printf("\n");
     }
 
@@ -87,7 +89,7 @@ int main(int argc, char *argv[])
 	name = strtok(buffer, "\n");
 
 	if (player_exists(players, NUM_PLAYERS, name) == true){
-	
+
 		printf("%s\n", "Enter Category and Value");
 		fgets(buffer, BUFFER_LEN, stdin);
 
@@ -107,8 +109,8 @@ int main(int argc, char *argv[])
                 prompt = strtok(NULL, "");
                 strcpy(str[2], prompt);
                 token = NULL;
-	
-		question_count--; 
+
+		question_count--;
 
 		if (valid_answer(str[0], atoi(str[1]), str[2]) == true){
 			printf("%s\n", "Correct Answer!");
@@ -118,11 +120,11 @@ int main(int argc, char *argv[])
 			display_answer(str[0], atoi(str[1]));
 		}
 
-		
+
 	}else{
 		printf("%s\n", "Name not valid Enter Players name");
 	}
-	
+
 	if (question_count <=0){
 		game_over =1;
 	}
