@@ -23,11 +23,33 @@ int question_count = NUM_QUESTIONS;
 
 
 // Processes the answer from the user containing what is or who is and tokenizes it to retrieve the answer.
-void tokenize(char *input, char **tokens){
-	char *ans = strrchr (input, ' ');
-	if (ans && *(ans+1)){
-		//return &ans+1;
-	}
+// Returns number of tokens
+int tokenize(char *buffer, char ***tokens_ptr)
+{
+    // Initialize empty token and counter
+    char *token = NULL;
+    char **tokens = NULL;
+    int count = 0;
+
+    // First pass: count spaces
+    for (int i = 0; buffer[i] != '\0'; i++) {
+        char c = buffer[i];
+        if (c == ' ') count++;
+    }
+
+    // Allocate memory for tokens
+    *tokens_ptr = calloc(count + 2, sizeof(char*));
+    tokens = *tokens_ptr;
+
+    // Second pass: create tokens
+    token = strtok(buffer, " \n");
+    for (int i=0; token != NULL; i++)
+    {
+        tokens[i] = token;
+        token = strtok(NULL, " \n");
+    }
+
+    return ++count;
 }
 
 // Displays the game results for each player, their name and final score, ranked from first to last place
@@ -78,51 +100,53 @@ int main(int argc, char *argv[])
 
     while (game_over ==0)
     {
-	char *token;
-	char *name;
-	char *prompt;
-
 	display_categories();
 
-	printf("%s\n", "Enter Players Name");
-	fgets(buffer, BUFFER_LEN, stdin);
-	name = strtok(buffer, "\n");
+	char *token;
+	char *name = NULL;
+	char *prompt;
+	char **tokens = NULL;
+	int count;
 
-	if (player_exists(players, NUM_PLAYERS, name) == true){
+	while (!player_exists(players, NUM_PLAYERS, name)) {
+		printf("Enter a valid player's name\n");
+		fgets(buffer, BUFFER_LEN, stdin);
+		count = tokenize(buffer, &tokens);
+		if (count >= 1) {
+			name = tokens[0];
+		}
+	}
 
+	count = 0;
+	char* category = NULL;
+	char* value = NULL;
+
+	// Loops until user enters a category and value of a non-answered question
+	while (!valid_input(category, value)) {
 		printf("%s\n", "Enter Category and Value");
 		fgets(buffer, BUFFER_LEN, stdin);
-
-		token = strtok(buffer, "\n");
-		prompt = strtok(token, " ");
-		strcpy(str[0], prompt);
-		prompt = strtok(NULL, " ");
-		strcpy(str[1], prompt);
-		token = NULL;
-
-		display_question(str[0], atoi(str[1]));
-
-		memset(buffer, 0, BUFFER_LEN);
-		fgets(buffer, BUFFER_LEN, stdin);
-
-		token = strtok(buffer, "\n");
-                prompt = strtok(NULL, "");
-                strcpy(str[2], prompt);
-                token = NULL;
-
-		question_count--;
-
-		if (valid_answer(str[0], atoi(str[1]), str[2]) == true){
-			printf("%s\n", "Correct Answer!");
-			update_score(players, NUM_PLAYERS, name, atoi(str[1]));
-		}else {
-			printf("%s\n", "Sorry incorrect answer");
-			display_answer(str[0], atoi(str[1]));
+		count = tokenize(buffer, &tokens);
+		if (count >= 2) {
+			category = tokens[0];
+			value = tokens[1];
 		}
+	}
+	display_question(category, atoi(value));
+	memset(buffer, 0, BUFFER_LEN);
 
+	count = 0;
+	while (count == 0) {
+		fgets(buffer, BUFFER_LEN, stdin);
+		count = tokenize(buffer, &tokens);
+	}
+	question_count--;
 
-	}else{
-		printf("%s\n", "Name not valid Enter Players name");
+	if (valid_answer(category, atoi(value), tokens[0]) == true){
+		printf("%s\n", "Correct Answer!");
+		update_score(players, NUM_PLAYERS, name, atoi(str[1]));
+	}else {
+		printf("%s\n", "Sorry incorrect answer");
+		display_answer(str[0], atoi(str[1]));
 	}
 
 	if (question_count <=0){

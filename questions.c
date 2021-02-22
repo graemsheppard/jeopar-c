@@ -93,12 +93,27 @@ bool validate_question(question q) {
     return false;
 }
 
+// Check a users category and input
+bool valid_input(char* category, char* value) {
+    if (!category || !value) { return false; }
+    int val = atoi(value);
+    if (val == 0) { return false; }
+    for (int i = 0; i < NUM_QUESTIONS; i++) {
+        if (strcmp(questions[i].category, category)
+            && questions[i].value == val
+            && questions[i].answered == false) {
+            return true;
+        }
+    }
+    return false;
+}
+
 // Displays each of the remaining categories and question dollar values that have not been answered
 void display_categories(void)
 {
 	// print categories and dollar values for each unanswered question in questions array
 	for(int i=0; i<NUM_CATEGORIES; i++){
-		printf("%s     ", categories[i]); 
+		printf("%s     ", categories[i]);
 	}
 	printf("\n");
 	for(int i=0; i<4;i++){
