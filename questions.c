@@ -76,12 +76,6 @@ void initialize_game(void)
 
     }
 
-    for (int i = 0; i < NUM_QUESTIONS; i++) {
-        printf("CAT: %s\n", questions[i].category);
-        printf("QUE: %s\n", questions[i].question);
-        printf("ANS: %s\n", questions[i].answer);
-        printf("VAL: %d\n\n", questions[i].value);
-    }
     fclose(fp);
 }
 
@@ -99,7 +93,7 @@ bool valid_input(char* category, char* value) {
     int val = atoi(value);
     if (val == 0) { return false; }
     for (int i = 0; i < NUM_QUESTIONS; i++) {
-        if (strcmp(questions[i].category, category)
+        if (strcmp(questions[i].category, category) == 0
             && questions[i].value == val
             && questions[i].answered == false) {
             return true;
@@ -143,15 +137,15 @@ bool valid_answer(char *category, int value, char *answer)
 {
     // Look into string comparison functions
     for (int i=0; i<NUM_QUESTIONS; i++){
-                if (strcmp(questions[i].category, category)==0 && questions[i].value == value){
-                        if(strcmp(strstr(answer, questions[i].answer), questions[i].answer) ==0){
-				questions[i].answered = true;
-				return true;
-			}
-			questions[1].answered=true;
-                }
+        if (strcmp(questions[i].category, category)==0 && questions[i].value == value) {
+            questions[i].answered = true;
+            if (strstr(answer, questions[i].answer) == NULL) {
+                return false;
+            } else {
+                return true;
+            }
         }
-
+    }
     return false;
 
 }

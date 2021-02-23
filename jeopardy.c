@@ -84,7 +84,7 @@ int main(int argc, char *argv[])
 
     // Prompt for players names
     // initialize each of the players in the array
-     for(int i=0; i< NUM_PLAYERS; i++){
+    for(int i=0; i< NUM_PLAYERS; i++){
 		player p;
         printf("Enter Player %d Name: ", i+1);
         scanf("%[^\n]%*c", p.name);
@@ -98,60 +98,65 @@ int main(int argc, char *argv[])
     game_over = 0;
     char str[4][BUFFER_LEN] = {{0}};
 
-    while (game_over ==0)
+    while (game_over == 0)
     {
-	display_categories();
+    	display_categories();
 
-	char *token;
-	char *name = NULL;
-	char *prompt;
-	char **tokens = NULL;
-	int count;
+    	char *token;
+    	char *name = malloc(MAX_LEN * sizeof(char));
+    	char *prompt;
+    	char **tokens = NULL;
+    	int count;
 
-	while (!player_exists(players, NUM_PLAYERS, name)) {
-		printf("Enter a valid player's name\n");
-		fgets(buffer, BUFFER_LEN, stdin);
-		count = tokenize(buffer, &tokens);
-		if (count >= 1) {
-			name = tokens[0];
-		}
-	}
+    	while (!player_exists(players, NUM_PLAYERS, name)) {
+    		printf("Enter a valid player's name\n");
+    		fgets(buffer, BUFFER_LEN, stdin);
+    		count = tokenize(buffer, &tokens);
+            if (tokens[0] == NULL) continue;
+    		if (count >= 1) {
+    			strcpy(name, tokens[0]);
+    		}
+    	}
 
-	count = 0;
-	char* category = NULL;
-	char* value = NULL;
+    	count = 0;
+    	char *category = malloc(MAX_LEN * sizeof(char));;
+    	char *value = malloc(MAX_LEN * sizeof(char));;
 
-	// Loops until user enters a category and value of a non-answered question
-	while (!valid_input(category, value)) {
-		printf("%s\n", "Enter Category and Value");
-		fgets(buffer, BUFFER_LEN, stdin);
-		count = tokenize(buffer, &tokens);
-		if (count >= 2) {
-			category = tokens[0];
-			value = tokens[1];
-		}
-	}
-	display_question(category, atoi(value));
-	memset(buffer, 0, BUFFER_LEN);
+    	// Loops until user enters a category and value of a non-answered question
+    	while (!valid_input(category, value)) {
+    		printf("%s\n", "Enter Category and Value");
+    		fgets(buffer, BUFFER_LEN, stdin);
+    		count = tokenize(buffer, &tokens);
+    		if (count >= 2) {
+    			strcpy(category, tokens[0]); // Copy the values from tokens
+    			strcpy(value, tokens[1]);
+    		}
+    	}
+    	display_question(category, atoi(value));
+    	memset(buffer, 0, BUFFER_LEN);
 
-	count = 0;
-	while (count == 0) {
-		fgets(buffer, BUFFER_LEN, stdin);
-		count = tokenize(buffer, &tokens);
-	}
-	question_count--;
+    	count = 0;
+    	while (count == 0) {
+    		fgets(buffer, BUFFER_LEN, stdin);
+    		count = tokenize(buffer, &tokens);
+    	}
+    	question_count--;
+        bool is_valid = valid_answer(category, atoi(value), tokens[0]);
+    	if (is_valid == true){
+    		printf("%s\n", "Correct Answer!");
+    		update_score(players, NUM_PLAYERS, name, atoi(value));
+    	}else {
+    		printf("%s\n", "Sorry incorrect answer");
+    		display_answer(str[0], atoi(str[1]));
+    	}
 
-	if (valid_answer(category, atoi(value), tokens[0]) == true){
-		printf("%s\n", "Correct Answer!");
-		update_score(players, NUM_PLAYERS, name, atoi(str[1]));
-	}else {
-		printf("%s\n", "Sorry incorrect answer");
-		display_answer(str[0], atoi(str[1]));
-	}
+        free(name);
+        free(category);
+        free(value);
 
-	if (question_count <=0){
-		game_over =1;
-	}
+    	if (question_count <=0){
+    		game_over =1;
+    	}
     }
     show_results(players, NUM_PLAYERS);
     return EXIT_SUCCESS;
