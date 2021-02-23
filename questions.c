@@ -107,19 +107,20 @@ void display_categories(void)
 {
 	// print categories and dollar values for each unanswered question in questions array
 	for(int i=0; i<NUM_CATEGORIES; i++){
-		printf("%s     ", categories[i]);
+                printf("\t%s", categories[i]);
 	}
 	printf("\n");
-	for(int i=0; i<4;i++){
+	
+	for(int i=0; i<4; i++){ 
 		for(int j=0; j<NUM_QUESTIONS; j+=4){
-			if(questions[j].answered == true){
-				printf("%s     ", "XXX");
+			if(questions[j+i].answered == true){
+				printf("\t\t%s", "XXX");
 			}else{
-				printf("%d     ", questions[j].value);
+				printf("\t\t%d", questions[j+i].value);
 			}
 		}
-		printf("\n");
-	}
+	printf("\n");
+	}	
 }
 
 // Displays the question for the category and dollar value
@@ -136,18 +137,21 @@ void display_question(char *category, int value)
 bool valid_answer(char *category, int value, char *answer)
 {
     // Look into string comparison functions
-    for (int i=0; i<NUM_QUESTIONS; i++){
-        if (strcmp(questions[i].category, category)==0 && questions[i].value == value) {
+    for (int i=0; i<NUM_QUESTIONS; i++)
+    {
+        if (strcmp(questions[i].category, category)==0 && questions[i].value == value) 
+	{
             questions[i].answered = true;
-            if (strstr(answer, questions[i].answer) == NULL) {
+            if (strstr(answer, questions[i].answer) == NULL)
+	    {    
                 return false;
-            } else {
+            }
+	    else 
+	    {
                 return true;
             }
         }
     }
-    return false;
-
 }
 
 // Returns true if the question has already been answered
