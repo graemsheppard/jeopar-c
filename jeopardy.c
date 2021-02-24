@@ -136,11 +136,22 @@ int main(int argc, char *argv[])
     	memset(buffer, 0, BUFFER_LEN);
 
     	count = 0;
-    	while (count == 0) {
-    		fgets(buffer, BUFFER_LEN, stdin);
-    		count = tokenize(buffer, &tokens);
-    	}
+      while (count == 0) {
+                fgets(buffer, BUFFER_LEN, stdin);
+                count = tokenize(buffer, &tokens);
+                if ((strcmp(tokens[0],"what") == 0)&&(strcmp(tokens[1],"is") == 0))
+                {
+                        count=1;
+                }
+                else
+                {
+                        printf("%s\n"," You need to put what is before the answer");
+                                count=0;
+                }
+        }
+
     	question_count--;
+
         bool is_valid = valid_answer(category, atoi(value), tokens[0]);
     	if (is_valid == true){
     		printf("%s\n", "Correct Answer!");
