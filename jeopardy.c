@@ -136,12 +136,15 @@ int main(int argc, char *argv[])
     	memset(buffer, 0, BUFFER_LEN);
 
     	count = 0;
-      while (count == 0) {
+        bool valid = false;
+        while (!valid) {
                 fgets(buffer, BUFFER_LEN, stdin);
                 count = tokenize(buffer, &tokens);
-                if ((strcmp(tokens[0],"what") == 0)&&(strcmp(tokens[1],"is") == 0))
-                {
-                        count=1;
+                if (count >= 3) {
+                    if ((strcmp(tokens[0],"what") == 0)&&(strcmp(tokens[1],"is") == 0))
+                    {
+                        valid = true;
+                    }
                 }
                 else
                 {
@@ -152,20 +155,20 @@ int main(int argc, char *argv[])
 
     	question_count--;
 
-        bool is_valid = valid_answer(category, atoi(value), tokens[0]);
+        bool is_valid = valid_answer(category, atoi(value), tokens[2]);
     	if (is_valid == true){
     		printf("%s\n", "Correct Answer!");
     		update_score(players, NUM_PLAYERS, name, atoi(value));
     	}else {
     		printf("%s\n", "Sorry incorrect answer");
-    		display_answer(str[0], atoi(str[1]));
+    		display_answer(category, atoi(value));
     	}
 
         free(name);
         free(category);
         free(value);
 
-    	if (question_count <=0){
+    	if (question_count <= 0){
     		game_over =1;
     	}
     }
